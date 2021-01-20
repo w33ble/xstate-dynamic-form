@@ -1,0 +1,17 @@
+/* ensure all pages have Bootstrap CSS */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+.md-container {
+  max-width: 800px;
+  padding-top: 2rem;
+  text-align: center;
+}
+
+.cntr-footer {
+  height: 80px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #ccc;
+}
