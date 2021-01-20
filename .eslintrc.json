@@ -1,4 +1,8 @@
 {
+  "env": {
+    "node": true,
+    "browser": true
+  },
   "extends": ["airbnb", "airbnb/hooks", "prettier"],
   "plugins": [
     "prettier",

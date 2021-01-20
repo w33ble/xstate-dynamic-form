@@ -1,22 +1,32 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 
 export default function Home() {
   return (
-    <Container className="md-container">
+    <>
       <Head>
         <title>xstate-dynamic-form | Welcome</title>
         <link rel="icon" href="/favicon-32x32.png" />
       </Head>
-      <Container>
-        <h1>Welcome to xstate-dynamic-form</h1>
-        <Link href="/">
-          <Button variant="outline-primary">Get Started</Button>
-        </Link>
-      </Container>
+      <Container className="md-container">
+        <Container>
+          <Row>
+            <Col className="align-center">
+              <h1>Welcome to xstate-dynamic-form</h1>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Link href="/light">
+                <Button variant="outline-primary">Control the light</Button>
+              </Link>
+            </Col>
+          </Row>
+        </Container>
 
-      <footer className="cntr-footer">This is a dynamic form demo</footer>
-    </Container>
+        <footer className="cntr-footer align-center">This is a dynamic form demo</footer>
+      </Container>
+    </>
   );
 }
