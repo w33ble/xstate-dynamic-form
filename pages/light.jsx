@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { useRef } from 'react';
 import {
   Container,
   Row,
@@ -9,25 +8,10 @@ import {
   Button,
   Form,
 } from 'react-bootstrap';
-import clsx from 'clsx';
-import { createMachine, assign } from 'xstate';
-import { useMachine } from '@xstate/react';
 import get from 'lodash.get';
-import useFetch from '../lib/useFetch';
-
-function useAsyncMachine(url) {
-  const machineRef = useRef(null);
-  const { data, error } = useFetch(url);
-
-  if (data) machineRef.current = createMachine(data);
-
-  return {
-    loading: !machineRef.current && !error,
-    machine: machineRef.current,
-    config: data,
-    error,
-  };
-}
+import clsx from 'clsx';
+import { useMachine } from '@xstate/react';
+import useAsyncMachine, { assign } from '../lib/useAsyncMachine';
 
 function buttonClass(bool, danger = false) {
   if (danger) return clsx({ danger: bool, 'outline-danger': !bool });
