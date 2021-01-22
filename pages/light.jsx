@@ -10,32 +10,42 @@ import {
 } from 'react-bootstrap';
 import clsx from 'clsx';
 import { createMachine } from '@xstate/fsm';
-// import { useMachine } from '@xstate/react';
+import { useMachine } from '@xstate/react/lib/fsm';
 import useFetch from '../lib/useFetch';
 
-export default function Home() {
-  const { data: lightConfig, error } = useFetch('/api/machines/light');
+function useAsyncMachine(url) {
   const machineRef = useRef(null);
+  const { data, error } = useFetch(url);
+
+  if (data) machineRef.current = createMachine(data);
+
+  return {
+    loading: !machineRef.current && !error,
+    machine: machineRef.current,
+    config: data,
+    error,
+  };
+}
+
+function buttonClass(bool, danger = false) {
+  if (danger) return clsx({ danger: bool, 'outline-danger': !bool });
+  return clsx({ primary: bool, 'outline-primary': !bool });
+}
+
+function Light({ machine, config, error }) {
+  const [state, send] = useMachine(machine, {
+    actions: {
+      updateColor: () => {
+        console.log('updateColor action');
+      },
+    },
+  });
 
   if (error) {
     return <div>{error.message}</div>;
   }
 
-  if (lightConfig) {
-    machineRef.current = createMachine(
-      lightConfig
-      // {
-      //   actions: {
-      //     submitForm(ctx, evt) {
-      //       // send form data to server
-      //       machineRef.current.send({ type: 'DATA_ERROR' })
-      //     },
-      //   },
-      // }
-    );
-  }
-
-  console.log('machineRef', machineRef.current);
+  console.log(state, config);
 
   return (
     <>
@@ -43,35 +53,55 @@ export default function Home() {
         <title>xstate-dynamic-form | The Light</title>
         <link rel="icon" href="/favicon-32x32.png" />
       </Head>
-      {machineRef.current && (
-        <Container className="md-container">
-          <Container>
-            <Row>
-              <Col className="align-center">
-                <h1>Control the light</h1>
-              </Col>
-            </Row>
-            <div className="configString">
-              <pre>{JSON.stringify(lightConfig, null, 2)}</pre>
-            </div>
-            <ButtonToolbar>
-              <ButtonGroup className="mr-2">
-                <Button variant={clsx({ primary: 1, 'outline-primary': 0 })}>
-                  Turn On
-                </Button>
-                <Button variant={clsx({ primary: 0, 'outline-primary': 1 })}>
-                  Turn Off
-                </Button>
-              </ButtonGroup>
-              <ButtonGroup>
-                <Button variant={clsx({ danger: 0, 'outline-danger': 1 })}>
-                  Break
-                </Button>
-              </ButtonGroup>
-            </ButtonToolbar>
-          </Container>
+      <Container className="md-container">
+        <Container>
+          <Row>
+            <Col>
+              <h1 className="text-center">Control the light</h1>
+            </Col>
+          </Row>
+          <ButtonToolbar>
+            <ButtonGroup className="mr-2">
+              <Button
+                variant={buttonClass(state.matches('lit'))}
+                onClick={() => {
+                  send('TURN_ON');
+                }}
+              >
+                Turn On
+              </Button>
+              <Button
+                variant={buttonClass(state.matches('unlit'))}
+                onClick={() => {
+                  send('TURN_OFF');
+                }}
+              >
+                Turn Off
+              </Button>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button
+                variant={buttonClass(state.matches('broken'), true)}
+                onClick={() => {
+                  send('BREAK');
+                }}
+              >
+                {state.matches('broken') ? 'Broken :(' : 'Break'}
+              </Button>
+            </ButtonGroup>
+          </ButtonToolbar>
         </Container>
-      )}
+      </Container>
     </>
   );
+}
+
+export default function LightWrapper() {
+  const { machine, loading, config, error } = useAsyncMachine(
+    '/api/machines/light'
+  );
+
+  if (loading) return null;
+
+  return <Light machine={machine} error={error} config={config} />;
 }

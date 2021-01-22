@@ -7,13 +7,6 @@
 }
 
 .cntr-footer {
-  height: 80px;
   margin-top: 20px;
-  display: flex;
   border-top: 1px solid #ccc;
-}
-
-.align-center {
-  text-align: center;
-  justify-content: center;
 }

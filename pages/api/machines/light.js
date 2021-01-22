@@ -3,7 +3,7 @@ const config = {
   id: 'light',
 
   // Initial state
-  initial: 'unlit',
+  initial: 'lit',
 
   // Local context for entire machine
   context: {

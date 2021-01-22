@@ -12,8 +12,8 @@ export default function Home() {
       <Container className="md-container">
         <Container>
           <Row>
-            <Col className="align-center">
-              <h1>Welcome to xstate-dynamic-form</h1>
+            <Col>
+              <h1 className="text-center">Welcome to xstate-dynamic-form</h1>
             </Col>
           </Row>
           <Row>
@@ -25,7 +25,9 @@ export default function Home() {
           </Row>
         </Container>
 
-        <footer className="cntr-footer align-center">This is a dynamic form demo</footer>
+        <footer className="cntr-footer">
+          <p className="text-center">This is a dynamic form demo</p>
+        </footer>
       </Container>
     </>
   );
