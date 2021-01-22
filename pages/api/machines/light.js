@@ -3,7 +3,7 @@ const config = {
   id: 'light',
 
   // Initial state
-  initial: 'lit',
+  initial: 'unlit',
 
   // Local context for entire machine
   context: {
@@ -17,17 +17,26 @@ const config = {
         CHANGE_COLOR: {
           actions: ['updateColor'],
         },
-        TURN_OFF: 'unlit',
+        TOGGLE: 'unlit',
         BREAK: 'broken',
+      },
+      meta: {
+        label: 'Power On',
       },
     },
     unlit: {
       on: {
-        TURN_ON: 'lit',
+        TOGGLE: 'lit',
         BREAK: 'broken',
+      },
+      meta: {
+        label: 'Cut Power',
       },
     },
     broken: {
+      meta: {
+        label: 'Broken :(',
+      },
       type: 'final',
     },
   },

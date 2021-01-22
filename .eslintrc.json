@@ -3,6 +3,13 @@
     "node": true,
     "browser": true
   },
+  "parserOptions": {
+    "ecmaVersion": 11,
+    "sourceType": "module",
+    "ecmaFeatures": {
+        "jsx": true
+    }
+  },
   "extends": ["airbnb", "airbnb/hooks", "prettier"],
   "plugins": [
     "prettier",

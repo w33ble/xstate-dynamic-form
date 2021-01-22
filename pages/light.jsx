@@ -7,9 +7,10 @@ import {
   ButtonToolbar,
   ButtonGroup,
   Button,
+  Form,
 } from 'react-bootstrap';
 import clsx from 'clsx';
-import { createMachine } from '@xstate/fsm';
+import { createMachine, assign } from '@xstate/fsm';
 import { useMachine } from '@xstate/react/lib/fsm';
 import useFetch from '../lib/useFetch';
 
@@ -32,12 +33,10 @@ function buttonClass(bool, danger = false) {
   return clsx({ primary: bool, 'outline-primary': !bool });
 }
 
-function Light({ machine, config, error }) {
+function Light({ machine, error }) {
   const [state, send] = useMachine(machine, {
     actions: {
-      updateColor: () => {
-        console.log('updateColor action');
-      },
+      updateColor: assign((ctx, ev) => ({ color: ev.color })),
     },
   });
 
@@ -45,7 +44,7 @@ function Light({ machine, config, error }) {
     return <div>{error.message}</div>;
   }
 
-  console.log(state, config);
+  // console.log(state);
 
   return (
     <>
@@ -60,36 +59,72 @@ function Light({ machine, config, error }) {
               <h1 className="text-center">Control the light</h1>
             </Col>
           </Row>
-          <ButtonToolbar>
-            <ButtonGroup className="mr-2">
-              <Button
-                variant={buttonClass(state.matches('lit'))}
-                onClick={() => {
-                  send('TURN_ON');
-                }}
-              >
-                Turn On
-              </Button>
-              <Button
-                variant={buttonClass(state.matches('unlit'))}
-                onClick={() => {
-                  send('TURN_OFF');
-                }}
-              >
-                Turn Off
-              </Button>
-            </ButtonGroup>
-            <ButtonGroup>
-              <Button
-                variant={buttonClass(state.matches('broken'), true)}
-                onClick={() => {
-                  send('BREAK');
-                }}
-              >
-                {state.matches('broken') ? 'Broken :(' : 'Break'}
-              </Button>
-            </ButtonGroup>
-          </ButtonToolbar>
+          <Row>
+            <Col>
+              <ButtonToolbar>
+                <ButtonGroup className="mr-2">
+                  <Button
+                    variant={buttonClass(state.matches('lit'))}
+                    onClick={() => {
+                      send('TOGGLE');
+                    }}
+                  >
+                    {state.meta?.label || 'Turn On'}
+                  </Button>
+                  <Button
+                    variant={buttonClass(state.matches('unlit'))}
+                    onClick={() => {
+                      send('TOGGLE');
+                    }}
+                  >
+                    {state.meta?.label || 'Turn Off'}
+                  </Button>
+                </ButtonGroup>
+                <ButtonGroup>
+                  <Button
+                    variant={buttonClass(state.matches('broken'), true)}
+                    onClick={() => {
+                      send('BREAK');
+                    }}
+                  >
+                    {state.meta?.label || 'Break'}
+                  </Button>
+                </ButtonGroup>
+              </ButtonToolbar>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form>
+                <Form.Label>Select Color</Form.Label>
+                <Form.Control
+                  as="select"
+                  disabled={!state.matches('lit')}
+                  onChange={(ev) => {
+                    send({ type: 'CHANGE_COLOR', color: ev.target.value });
+                  }}
+                >
+                  <option value="#fff">White</option>
+                  <option value="#f00">Red</option>
+                  <option value="#0f0">Green</option>
+                  <option value="#00f">Blue</option>
+                </Form.Control>
+                <div
+                  style={{
+                    padding: 4,
+                    fontWeight: 'bold',
+                    color: !state.matches('broken')
+                      ? state.context.color
+                      : '#000',
+                    backgroundColor: '#666',
+                  }}
+                >
+                  Current color: &nbsp;
+                  {!state.matches('broken') ? state.context.color : 'N/A'}
+                </div>
+              </Form>
+            </Col>
+          </Row>
         </Container>
       </Container>
     </>
