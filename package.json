@@ -21,10 +21,10 @@
     "prettier": "^2.2.1"
   },
   "dependencies": {
-    "@xstate/fsm": "^1.5.2",
     "@xstate/react": "^1.2.2",
     "bootstrap": "^4.6.0",
     "clsx": "^1.1.1",
+    "lodash.get": "^4.4.2",
     "next": "^10.0.5",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",

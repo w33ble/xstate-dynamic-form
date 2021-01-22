@@ -21,7 +21,7 @@ const config = {
         BREAK: 'broken',
       },
       meta: {
-        label: 'Power On',
+        label: 'Light is On',
       },
     },
     unlit: {
@@ -30,7 +30,7 @@ const config = {
         BREAK: 'broken',
       },
       meta: {
-        label: 'Cut Power',
+        label: 'Power Lost',
       },
     },
     broken: {

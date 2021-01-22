@@ -10,8 +10,9 @@ import {
   Form,
 } from 'react-bootstrap';
 import clsx from 'clsx';
-import { createMachine, assign } from '@xstate/fsm';
-import { useMachine } from '@xstate/react/lib/fsm';
+import { createMachine, assign } from 'xstate';
+import { useMachine } from '@xstate/react';
+import get from 'lodash.get';
 import useFetch from '../lib/useFetch';
 
 function useAsyncMachine(url) {
@@ -69,7 +70,7 @@ function Light({ machine, error }) {
                       send('TOGGLE');
                     }}
                   >
-                    {state.meta?.label || 'Turn On'}
+                    {get(state, ['meta', 'light.lit', 'label']) || 'Turn On'}
                   </Button>
                   <Button
                     variant={buttonClass(state.matches('unlit'))}
@@ -77,7 +78,7 @@ function Light({ machine, error }) {
                       send('TOGGLE');
                     }}
                   >
-                    {state.meta?.label || 'Turn Off'}
+                    {get(state, ['meta', 'light.unlit', 'label']) || 'Turn Off'}
                   </Button>
                 </ButtonGroup>
                 <ButtonGroup>
@@ -87,7 +88,7 @@ function Light({ machine, error }) {
                       send('BREAK');
                     }}
                   >
-                    {state.meta?.label || 'Break'}
+                    {get(state, ['meta', 'light.broken', 'label']) || 'Break'}
                   </Button>
                 </ButtonGroup>
               </ButtonToolbar>
