@@ -19,7 +19,10 @@ export default function Home() {
           <Row>
             <Col>
               <Link href="/light">
-                <Button variant="outline-primary">Control the light</Button>
+                <Button variant="link">Control the light</Button>
+              </Link>
+              <Link href="/form">
+                <Button variant="link">Complete the form</Button>
               </Link>
             </Col>
           </Row>
