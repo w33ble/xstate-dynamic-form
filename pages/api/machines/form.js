@@ -15,11 +15,15 @@ const basicDataConfig = {
   states: {
     ...formStates,
   },
+  meta: {
+    email: 'Enter Your Email',
+  },
 };
 
 const fulfillmentTypeConfig = {
   on: {
     NEXT: { target: 'order_submitted' },
+    PREV: { target: 'basic_data' },
   },
   initial: 'normal',
   states: {
